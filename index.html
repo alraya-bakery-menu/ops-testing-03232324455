@@ -69,57 +69,6 @@
       line-height: 1.6;
     }
     
-    .dashboard-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    
-    .stat-card {
-      background: white;
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      padding: 25px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      transition: var(--transition);
-    }
-    
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-    }
-    
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 5px;
-      height: 100%;
-      background: linear-gradient(to bottom, var(--primary-color), var(--primary-dark));
-    }
-    
-    .stat-icon {
-      font-size: 40px;
-      margin-bottom: 15px;
-      color: var(--primary-color);
-    }
-    
-    .stat-value {
-      font-size: 2.2rem;
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: var(--primary-color);
-    }
-    
-    .stat-label {
-      color: #666;
-      font-size: 1.1rem;
-    }
-    
     .search-container {
       background: white;
       padding: 25px;
@@ -1039,10 +988,6 @@
         gap: 15px;
         text-align: center;
       }
-      
-      .dashboard-stats {
-        grid-template-columns: 1fr;
-      }
     }
 
     /* Print Styles */
@@ -1195,6 +1140,58 @@
       font-size: 24px;
       animation: pulse 1s infinite;
     }
+    
+    /* بداية التعديلات المطلوبة */
+    
+    /* 1. إزالة إحصائيات الطلبات */
+    .dashboard-stats {
+      display: none;
+    }
+    
+    /* 2. تحسين واجهة اختيار المندوب وحالة الطلب */
+    .update-section {
+      flex-direction: row;
+      align-items: center;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    
+    .update-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .form-group {
+      margin-bottom: 0;
+      width: auto;
+      min-width: 200px;
+      flex: 1;
+    }
+    
+    .actions-row {
+      margin-top: 15px;
+    }
+    
+    /* 3. تحسين التصميم لأجهزة الكمبيوتر */
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 95%;
+      }
+      
+      .orders-container {
+        overflow-x: auto;
+      }
+      
+      table {
+        min-width: 1200px;
+      }
+    }
+    
+    /* 4. إزالة معاينة واتساب والإرسال مباشرة */
+    .action-button.whatsapp {
+      background: linear-gradient(to right, #25D366, #128C7E);
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -1215,37 +1212,7 @@
       </div>
     </div>
     
-    <!-- Statistics Dashboard -->
-    <div class="dashboard-stats">
-      <div class="stat-card">
-        <div class="stat-icon">
-          <i class="fas fa-shopping-cart"></i>
-        </div>
-        <div class="stat-value">47</div>
-        <div class="stat-label">إجمالي الطلبات</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">
-          <i class="fas fa-clock"></i>
-        </div>
-        <div class="stat-value">12</div>
-        <div class="stat-label">طلبات قيد المعالجة</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">
-          <i class="fas fa-truck"></i>
-        </div>
-        <div class="stat-value">8</div>
-        <div class="stat-label">طلبات في الطريق</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">
-          <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="stat-value">27</div>
-        <div class="stat-label">طلبات مكتملة</div>
-      </div>
-    </div>
+    <!-- تم إزالة إحصائيات الطلبات هنا -->
     
     <!-- Notification for new orders -->
     <div id="new-order-notification" class="new-order-notification">
@@ -1481,45 +1448,6 @@
     </div>
   </div>
 
-  <!-- WhatsApp Preview Modal -->
-  <div id="whatsappModal" class="modal whatsapp-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <i class="fab fa-whatsapp"></i> إرسال الطلب إلى واتساب
-      </div>
-      <div class="modal-body">
-        <p>يرجى مراجعة تفاصيل الطلب قبل الإرسال:</p>
-        
-        <div class="whatsapp-preview" id="whatsapp-preview">
-          📦 <strong>طلب جديد للتوصيل</strong>
-          
-          👤 <strong>العميل:</strong> أحمد محمد
-          📱 <strong>الهاتف:</strong> 0791234567
-          📍 <strong>المنطقة:</strong> الرمثا
-          💳 <strong>طريقة الدفع:</strong> كاش
-          💰 <strong>الإجمالي:</strong> 25.5 د.أ
-          
-          🛒 <strong>المنتجات:</strong>
-          1. بيتزا كبيرة - 1 × 15.0 د.أ
-          2. كوكاكولا - 2 × 2.5 د.أ
-          3. سلطة سيزر - 1 × 5.5 د.أ
-          
-          📅 <strong>تاريخ الطلب:</strong> 2025-08-02 14:30
-        </div>
-        
-        <textarea class="additional-notes" id="additional-notes" placeholder="أضف ملاحظات إضافية هنا (اختياري)"></textarea>
-      </div>
-      <div class="modal-footer">
-        <button class="confirm-btn" id="confirm-whatsapp" style="background: linear-gradient(to right, #25D366, #128C7E);">
-          <i class="fab fa-whatsapp"></i> إرسال إلى واتساب
-        </button>
-        <button class="cancel-btn" id="cancel-whatsapp">
-          <i class="fas fa-times"></i> إلغاء
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- Delete Order Modal -->
   <div id="deleteModal" class="modal">
     <div class="modal-content">
@@ -1605,15 +1533,8 @@
     const deleteMessage = document.getElementById('delete-message');
     const notification = document.getElementById('new-order-notification');
     const acceptedNotification = document.getElementById('accepted-notification');
-    const whatsappModal = document.getElementById('whatsappModal');
-    const whatsappPreview = document.getElementById('whatsapp-preview');
-    const additionalNotes = document.getElementById('additional-notes');
-    const confirmWhatsappBtn = document.getElementById('confirm-whatsapp');
-    const cancelWhatsappBtn = document.getElementById('cancel-whatsapp');
-    
-    // Audio notification for new orders
     const notificationSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3");
-    notificationSound.volume = 0.5; // Reduce volume a bit
+    notificationSound.volume = 0.5;
     
     // Function to format date - حل مشكلة التاريخ غير الصالح
     function formatDate(dateValue) {
@@ -1853,7 +1774,7 @@
     }
     
     // Function to format order details for WhatsApp message
-    function formatOrderMessage(order, additionalNotes = '') {
+    function formatOrderMessage(order) {
       let message = `📦 *طلب جديد للتوصيل*\n\n`;
       
       // Order details
@@ -1865,10 +1786,6 @@
       
       if (order.notes) {
         message += `📝 *ملاحظات العميل:* ${order.notes}\n`;
-      }
-      
-      if (additionalNotes) {
-        message += `📌 *ملاحظات إضافية:* ${additionalNotes}\n`;
       }
       
       // Order items
@@ -2030,20 +1947,6 @@
       deleteModal.style.display = 'none';
     });
     
-    // WhatsApp modal event listeners
-    confirmWhatsappBtn.addEventListener('click', function() {
-      const notes = additionalNotes.value.trim();
-      const order = allOrders[currentOrderKey];
-      const message = formatOrderMessage(order, notes);
-      sendToWhatsApp(message);
-      whatsappModal.style.display = 'none';
-      showMessage('تم فتح واتساب لإرسال الطلب للمندوب!', true);
-    });
-    
-    cancelWhatsappBtn.addEventListener('click', function() {
-      whatsappModal.style.display = 'none';
-    });
-    
     // Close modals when clicking outside
     window.addEventListener('click', function(event) {
       if (event.target === exportModal) {
@@ -2051,9 +1954,6 @@
       }
       if (event.target === deleteModal) {
         deleteModal.style.display = 'none';
-      }
-      if (event.target === whatsappModal) {
-        whatsappModal.style.display = 'none';
       }
     });
     
@@ -2306,20 +2206,15 @@
         });
       });
       
-      // Add event listeners to WhatsApp buttons
+      // Add event listeners to WhatsApp buttons - إرسال مباشر بدون معاينة
       document.querySelectorAll('.action-button.whatsapp').forEach(btn => {
         btn.addEventListener('click', function(e) {
           e.stopPropagation(); // Prevent row click event
           const key = this.getAttribute('data-key');
-          currentOrderKey = key;
           const order = allOrders[key];
-          
-          // Update the preview message
-          whatsappPreview.textContent = formatOrderMessage(order);
-          additionalNotes.value = '';
-          
-          // Show the modal
-          whatsappModal.style.display = 'flex';
+          const message = formatOrderMessage(order);
+          sendToWhatsApp(message);
+          showMessage('تم إرسال الطلب إلى واتساب بنجاح!', true);
         });
       });
     }
